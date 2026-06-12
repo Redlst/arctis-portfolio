@@ -40,19 +40,19 @@
   "reviews": [
     {
       "id": "review-1",
-      "imageUrl": "",
+      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781279310/mexvgw1r7jbfbqy32udq.png",
       "stars": 5,
-      "quote": "Delivered exactly what I needed — fast, clean, and professional. The landing page went live in 3 days and already converted new clients.",
-      "clientName": "Alex M.",
-      "clientRole": "Owner, SHARP Barbershop",
-      "clientContact": ""
+      "quote": "The result exceeded my expectations. The website feels timeless, elegant, and highly sophisticated, perfectly reflecting the artistic vision behind the photography. Every detail contributes to a refined and luxurious experience that feels both modern and exclusive.",
+      "clientName": "Kristina.",
+      "clientRole": "Photographer.",
+      "clientContact": "https://t.me/KST_R"
     },
     {
       "id": "review-2",
       "imageUrl": "",
       "stars": 5,
       "quote": "Our renovation business looks completely premium now. The site design built instant trust with new customers. Highly recommend.",
-      "clientName": "Maria K.",
+      "clientName": "Andrii P.",
       "clientRole": "Director, ProArt Renovation",
       "clientContact": ""
     },
@@ -60,10 +60,10 @@
       "id": "review-3",
       "imageUrl": "",
       "stars": 5,
-      "quote": "The Telegram bot handles 80% of our support tickets automatically. We're saving hours every day. Best investment this quarter.",
-      "clientName": "James R.",
-      "clientRole": "Founder, E-commerce Store",
-      "clientContact": ""
+      "quote": "",
+      "clientName": "Vira N.",
+      "clientRole": "Financial advisor.",
+      "clientContact": "https://t.me/vira_nedohoda"
     }
   ],
   "services": [
