@@ -9,7 +9,7 @@
         "HTML/CSS."
       ],
       "liveUrl": "https://proart-landing.vercel.app/",
-      "imageUrl": "",
+      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781279714/kvrixwamrcq5mboc8glr.png",
       "clientContact": ""
     },
     {
@@ -22,18 +22,18 @@
         "Railway"
       ],
       "liveUrl": "https://t.me/vira_nedohoda1_bot",
-      "imageUrl": "",
+      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781280229/igxzn8p2zar7qenbh9ao.jpg",
       "clientContact": "https://t.me/vira_nedohoda"
     },
     {
       "id": "proj-1781275928013",
-      "name": "KSTphoto — Photography Portfolio & CMS",
+      "name": "KSTphoto — Photography Portfolio",
       "description": "Luxury dark landing page with admin panel, 4 languages and Cloudinary storage.",
       "tags": [
         "Next.js / Tailwind / Vercel / CMS / Photography"
       ],
       "liveUrl": "https://kstphoto.vercel.app/",
-      "imageUrl": "",
+      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781279737/i1keaviccjf5t9mhwkpy.png",
       "clientContact": "https://t.me/KST_R"
     }
   ],
