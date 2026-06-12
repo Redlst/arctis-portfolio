@@ -1,20 +1,15 @@
 {
   "projects": [
     {
-      "id": "sharp-barbershop",
-      "name": "SHARP Barbershop",
-      "description": "Premium landing page for a barbershop brand. Clean dark aesthetic, online booking CTA, and lightning-fast load times. Built and deployed on Vercel.",
-      "tags": ["Landing Page", "HTML/CSS", "Vercel"],
-      "liveUrl": "",
-      "imageUrl": "",
-      "clientContact": ""
-    },
-    {
       "id": "proart-renovation",
       "name": "ProArt Renovation",
       "description": "Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. Deployed on Vercel.",
-      "tags": ["Landing Page", "HTML/CSS", "Vercel"],
-      "liveUrl": "",
+      "tags": [
+        "Landing Page",
+        "HTML/CSS",
+        "Vercel"
+      ],
+      "liveUrl": "https://proart-landing.vercel.app/",
       "imageUrl": "",
       "clientContact": ""
     },
@@ -22,7 +17,11 @@
       "id": "ai-telegram-bot",
       "name": "AI Telegram Chatbot",
       "description": "24/7 automated Telegram bot for a client, powered by Claude Haiku. Handles FAQs, captures leads, and escalates to human when needed.",
-      "tags": ["Telegram Bot", "Claude AI", "Railway"],
+      "tags": [
+        "Telegram Bot",
+        "Claude AI",
+        "Railway"
+      ],
       "liveUrl": "",
       "imageUrl": "",
       "clientContact": ""
