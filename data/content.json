@@ -22,7 +22,7 @@
         "Railway"
       ],
       "liveUrl": "https://t.me/vira_nedohoda1_bot",
-      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781280229/igxzn8p2zar7qenbh9ao.jpg",
+      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781280534/ultsppf7er8lznefijds.webp",
       "clientContact": "https://t.me/vira_nedohoda"
     },
     {
@@ -30,7 +30,11 @@
       "name": "KSTphoto — Photography Portfolio",
       "description": "Luxury dark landing page with admin panel, 4 languages and Cloudinary storage.",
       "tags": [
-        "Next.js / Tailwind / Vercel / CMS / Photography"
+        "Next.js",
+        "Tailwind",
+        "Vercel",
+        "CMS",
+        "Photography"
       ],
       "liveUrl": "https://kstphoto.vercel.app/",
       "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781279737/i1keaviccjf5t9mhwkpy.png",
