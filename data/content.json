@@ -2,12 +2,11 @@
   "projects": [
     {
       "id": "proart-renovation",
-      "name": "ProArt Renovation",
-      "description": "Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. Deployed on Vercel.",
+      "name": "ProArt Renovation.",
+      "description": "Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. ",
       "tags": [
         "Landing Page",
-        "HTML/CSS",
-        "Vercel"
+        "HTML/CSS."
       ],
       "liveUrl": "https://proart-landing.vercel.app/",
       "imageUrl": "",
@@ -22,9 +21,20 @@
         "Claude AI",
         "Railway"
       ],
-      "liveUrl": "",
+      "liveUrl": "https://t.me/vira_nedohoda1_bot",
       "imageUrl": "",
-      "clientContact": ""
+      "clientContact": "https://t.me/vira_nedohoda"
+    },
+    {
+      "id": "proj-1781275928013",
+      "name": "KSTphoto — Photography Portfolio & CMS",
+      "description": "Luxury photography landing page for Kristina, a fashion & lifestyle photographer based in Marbella, Spain. Built with Next.js 14, Tailwind CSS, and Framer Motion. Features a cinematic dark aesthetic, 4-language switcher (RU/UA/ES/EN), Cloudinary image storage, password-protected admin panel with live content editing, and deployed on Vercel.",
+      "tags": [
+        "Next.js / React / TypeScript / Tailwind CSS / Framer Motion / Cloudinary / Vercel / i18n / CMS / Admin Panel  / Photography / Landing Page / Dark UI / Luxury Design/  Full Stack"
+      ],
+      "liveUrl": "https://kstphoto.vercel.app/",
+      "imageUrl": "",
+      "clientContact": "https://t.me/KST_R"
     }
   ],
   "reviews": [
