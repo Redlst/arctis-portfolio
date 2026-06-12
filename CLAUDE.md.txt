@@ -1,0 +1,116 @@
+# ARCTIS — Portfolio Landing Page
+
+## PROJECT OVERVIEW
+
+Build a premium dark-mode portfolio landing page for **Arctis** — an AI Solutions Builder.
+Target audience: US/Western clients (English language only).
+The page must look expensive, modern, and trustworthy.
+
+---
+
+## DESIGN REQUIREMENTS
+
+- **Theme**: Dark mode only. Deep blacks (#0A0A0A, #111111), not navy or gray.
+- **Accent color**: Cold electric blue or icy cyan — matches "Arctis" (arctic feel).
+- **Typography**: Clean, modern sans-serif. Large bold headlines. Plenty of whitespace.
+- **Style**: Premium tech/AI aesthetic. Think Linear, Vercel, Raycast — not generic freelancer site.
+- **Animations**: Subtle fade-in on scroll. Nothing flashy or distracting.
+- **Fully responsive**: Looks perfect on mobile and desktop.
+
+---
+
+## TECH STACK
+
+- Single HTML file (index.html)
+- Pure HTML + CSS + vanilla JavaScript
+- No frameworks, no npm, no build tools
+- External fonts via Google Fonts only
+- Deploy-ready for Vercel (just drag and drop)
+
+---
+
+## PAGE STRUCTURE
+
+Build these sections in order:
+
+### 1. NAVBAR
+- Logo: "ARCTIS" in bold, cold/icy font style
+- Navigation links: Work, Reviews, Contact
+- Sticky on scroll, slightly transparent background with blur
+
+### 2. HERO SECTION
+- Big headline: "I Build AI-Powered Products That Grow Your Business"
+- Subheadline: "From landing pages to AI chatbots — built fast, deployed faster."
+- Two CTA buttons: "See My Work" (primary) and "Get In Touch" (secondary/outline)
+- Subtle animated background (CSS only — stars, particles, or grid lines)
+
+### 3. SERVICES / WHAT I BUILD
+Three service cards:
+1. **AI Landing Pages** — Fast, conversion-focused landing pages built with AI
+2. **Telegram AI Chatbots** — 24/7 automated bots powered by Claude AI
+3. **Web Applications** — Custom web products tailored to your business needs
+
+### 4. PORTFOLIO / WORK SECTION
+Title: "My Work"
+Three project cards with:
+- Project screenshot placeholder (image tag with src that can be easily swapped)
+- Project name
+- Short description
+- Tags (e.g. "Landing Page", "AI Chatbot", "Vercel")
+- "View Live" button (href="#" — easy to update)
+
+Projects to include:
+1. **SHARP Barbershop** — Premium landing page for a barbershop brand. Built and deployed on Vercel.
+   - Tags: Landing Page, HTML/CSS, Vercel
+2. **ProArt Renovation** — Business landing page for a renovation company.
+   - Tags: Landing Page, HTML/CSS, Vercel
+3. **AI Telegram Chatbot** — 24/7 automated Telegram bot for a client, powered by Claude Haiku.
+   - Tags: Telegram Bot, Claude AI, Railway
+
+### 5. TESTIMONIALS / REVIEWS SECTION
+Title: "What Clients Say"
+- Layout: Masonry or grid of review cards
+- Each card has:
+  - Screenshot placeholder (img tag — easy to swap with real screenshot)
+  - Client name (placeholder)
+  - Short quote placeholder
+- Add 3 placeholder cards
+- Important: make it easy to add more cards later — clear comment in HTML where to copy/paste
+
+### 6. CONTACT / CTA SECTION
+Title: "Let's Build Something Together"
+Subtext: "Have a project in mind? Reach out — I respond fast."
+Social links (icons + text):
+- Telegram: @username (placeholder)
+- X (Twitter): @username (placeholder)
+- LinkedIn: /in/username (placeholder)
+- Instagram: @username (placeholder)
+- Email: hello@arctis.com (placeholder)
+
+Use simple SVG icons or Unicode symbols for social links.
+
+### 7. FOOTER
+- "© 2025 Arctis. All rights reserved."
+- Minimal, dark, clean.
+
+---
+
+## CODE QUALITY RULES
+
+- DO NOT use any CSS frameworks (no Tailwind, no Bootstrap)
+- Write clean, commented CSS with clear section labels
+- Use CSS custom properties (variables) for all colors and fonts at the top
+- Every image tag must have a clear comment: `<!-- Replace with your screenshot -->`
+- Every placeholder text must have a comment: `<!-- Update with real info -->`
+- The portfolio section and testimonials section must be easy to duplicate — add HTML comment blocks explaining exactly how to add a new card
+- Smooth scroll behavior on nav links
+
+---
+
+## IMPORTANT NOTES
+
+- Build the ENTIRE page in one single index.html file
+- DO NOT split into multiple files
+- Make sure the page looks impressive even with placeholder images (use CSS gradients as image placeholders)
+- The end result should look like it was built by a $5,000/project agency
+- Every section should have enough padding — breathe!

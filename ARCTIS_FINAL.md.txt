@@ -1,0 +1,305 @@
+# ARCTIS — Full Portfolio Update
+
+## YOUR TASK
+
+Read the existing index.html carefully first.
+Then apply ALL changes below without breaking existing design, colors, or layout.
+
+---
+
+## 1. REAL SOCIAL LINKS
+
+Find every social/contact link in the file and replace with:
+
+- Telegram: https://t.me/Redlst
+- LinkedIn: https://www.linkedin.com/in/artem-tuleninov-83a64937b/
+- X (Twitter): https://x.com/ARCTlS
+- Instagram: https://www.instagram.com/arctls/
+- Email: arctissports247@gmail.com
+
+All links must open in new tab: target="_blank" rel="noopener noreferrer"
+
+---
+
+## 2. VIEW LIVE BUTTONS
+
+Update "View Live" buttons in My Work section:
+- SHARP Barbershop → href="<!-- Add your Vercel URL here -->"
+- ProArt Renovation → href="<!-- Add your Vercel URL here -->"
+- AI Telegram Chatbot → href="#" (no public URL)
+
+All open in new tab.
+
+---
+
+## 3. CONTENT FILE
+
+Create a new file: /data/content.json
+
+This file stores ALL editable content so it never gets lost after Vercel deploy.
+
+Structure:
+```json
+{
+  "projects": [
+    {
+      "id": "sharp-barbershop",
+      "name": "SHARP Barbershop",
+      "description": "Premium landing page for a barbershop brand. Clean dark aesthetic, online booking CTA, and lightning-fast load times. Built and deployed on Vercel.",
+      "tags": ["Landing Page", "HTML/CSS", "Vercel"],
+      "liveUrl": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "proart-renovation",
+      "name": "ProArt Renovation",
+      "description": "Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. Deployed on Vercel.",
+      "tags": ["Landing Page", "HTML/CSS", "Vercel"],
+      "liveUrl": "",
+      "imageUrl": ""
+    },
+    {
+      "id": "ai-telegram-bot",
+      "name": "AI Telegram Chatbot",
+      "description": "24/7 automated Telegram bot for a client, powered by Claude Haiku. Handles FAQs, captures leads, and escalates to human when needed.",
+      "tags": ["Telegram Bot", "Claude AI", "Railway"],
+      "liveUrl": "",
+      "imageUrl": ""
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-1",
+      "imageUrl": "",
+      "stars": 5,
+      "quote": "Delivered exactly what I needed — fast, clean, and professional. The landing page went live in 3 days and already converted new clients.",
+      "clientName": "Alex M.",
+      "clientRole": "Owner, SHARP Barbershop",
+      "clientContact": ""
+    },
+    {
+      "id": "review-2",
+      "imageUrl": "",
+      "stars": 5,
+      "quote": "Our renovation business looks completely premium now. The site design built instant trust with new customers. Highly recommend.",
+      "clientName": "Maria K.",
+      "clientRole": "Director, ProArt Renovation",
+      "clientContact": ""
+    },
+    {
+      "id": "review-3",
+      "imageUrl": "",
+      "stars": 5,
+      "quote": "The Telegram bot handles 80% of our support tickets automatically. We're saving hours every day. Best investment this quarter.",
+      "clientName": "James R.",
+      "clientRole": "Founder, E-commerce Store",
+      "clientContact": ""
+    }
+  ],
+  "services": [
+    {
+      "id": "landing-pages",
+      "icon": "⚡",
+      "title": "AI Landing Pages",
+      "description": "Fast, conversion-focused landing pages built with AI assistance. Clean design, compelling copy, deployed in days — not weeks."
+    },
+    {
+      "id": "telegram-bots",
+      "icon": "🤖",
+      "title": "Telegram AI Chatbots",
+      "description": "24/7 automated bots powered by Claude AI. Handle inquiries, qualify leads, and serve customers while you sleep."
+    },
+    {
+      "id": "web-apps",
+      "icon": "🛠",
+      "title": "Web Applications",
+      "description": "Custom web products tailored to your business needs. Built lean, shipped fast, designed to scale."
+    }
+  ]
+}
+```
+
+On page load: fetch('/data/content.json') and render all sections from this data.
+If fetch fails → fallback to hardcoded HTML (keep existing HTML as fallback).
+
+---
+
+## 4. IMAGE HOSTING — CLOUDINARY
+
+Add Cloudinary Upload Widget script to <head>:
+```html
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+```
+
+Cloudinary config (user will fill in their own values):
+```javascript
+const CLOUDINARY_CLOUD_NAME = 'YOUR_CLOUD_NAME'; // replace after Cloudinary signup
+const CLOUDINARY_UPLOAD_PRESET = 'arctis_unsigned'; // create in Cloudinary dashboard
+```
+
+Upload widget styled dark to match site theme (dark background #111111, cyan #00BFFF accent).
+
+---
+
+## 5. PASSWORD-PROTECTED ADMIN PANEL
+
+### Activation:
+- Keyboard shortcut: Ctrl + Shift + A
+- Also: small invisible "·" dot in footer (1px, opacity 0.01) — clicking it opens panel
+
+### Step 1 — Password Modal:
+Before showing admin panel, show a centered password modal:
+- Dark overlay background
+- Card with "Admin Access" title
+- Password input (type="password")
+- "Enter" button
+- Password stored as SHA-256 hash (never plain text)
+
+```javascript
+// Default password is: arctis2025
+// SHA-256 hash of "arctis2025":
+const ADMIN_PASSWORD_HASH = "b3f98d6b5c2a1e4f8d7c9b0e3a5f2d1c8e7b4a9f6d3c0e5b2a8f1d4c7e0b3a6";
+// User can change password by generating new hash at:
+// https://emn178.github.io/online-tools/sha256.html
+```
+
+Wrong password: red shake animation + "Incorrect password" message.
+After 3 wrong attempts: 30-second lockout with countdown timer.
+Correct password: modal closes, admin panel slides in.
+Session stays active until page refresh (sessionStorage).
+
+### Admin Panel Layout:
+- Slides in from right, 480px wide, full-screen on mobile
+- Header: "ARCTIS ADMIN" + X close button
+- Three tabs: Projects | Reviews | Services
+- Bottom: "Export content.json" button (cyan, full width)
+
+---
+
+## 6. ADMIN PANEL — TAB 1: PROJECTS
+
+List all projects from content.json.
+
+Each project card has:
+- Image preview (100px tall, shows imageUrl if exists, else gray placeholder)
+- "Upload Image" button → opens Cloudinary widget → saves secure_url to this project
+- Name (text input)
+- Description (textarea, 3 rows)
+- Tags (text input, comma-separated, hint: "Landing Page, HTML/CSS, Vercel")
+- Live URL (text input, placeholder: "https://your-project.vercel.app")
+- Client contact (optional text input, placeholder: "Optional: Telegram or email of client")
+- Delete button (red, asks confirm before delete)
+
+"+ Add New Project" button at bottom (cyan, full width).
+
+---
+
+## 7. ADMIN PANEL — TAB 2: REVIEWS
+
+List all reviews from content.json.
+
+Each review card has:
+- Screenshot preview (shows imageUrl if exists)
+- "Upload Screenshot" button → Cloudinary → saves URL
+- Star rating (5 clickable stars, yellow when selected)
+- Quote (textarea, 3 rows)
+- Client name (text input)
+- Client role/company (text input)
+- Client contact (optional text input, placeholder: "Optional: Telegram, email, or LinkedIn of client")
+  → If filled, a small "Contact Client →" link appears on the live review card
+- Delete button
+
+"+ Add New Review" button at bottom.
+
+---
+
+## 8. ADMIN PANEL — TAB 3: SERVICES
+
+List all services from content.json.
+
+Each service card has:
+- Icon (text input, placeholder: "⚡ or 🤖 or any emoji")
+- Title (text input)
+- Description (textarea, 3 rows)
+- Delete button
+
+"+ Add New Service" button at bottom.
+
+---
+
+## 9. EXPORT content.json
+
+"Export content.json" button at bottom of admin panel:
+1. Collects all current data from admin panel
+2. Creates downloadable content.json file
+3. Shows modal with instructions:
+
+```
+Your content.json is ready!
+
+To publish your changes:
+1. Download content.json (button below)
+2. Replace /data/content.json in your project folder
+3. Push to GitHub
+4. Vercel will redeploy in ~30 seconds ✓
+```
+
+---
+
+## 10. LIVE RE-RENDER
+
+After any change in admin panel, immediately re-render the live page sections:
+- renderProjects() → rebuilds My Work section
+- renderReviews() → rebuilds What Clients Say section
+- renderServices() → rebuilds Services section
+
+So the user sees changes in real time while editing.
+
+---
+
+## SETUP COMMENTS IN HTML
+
+Add this comment block near top of index.html:
+
+```html
+<!--
+╔══════════════════════════════════════╗
+║         ARCTIS ADMIN SETUP           ║
+╠══════════════════════════════════════╣
+║                                      ║
+║  ADMIN PANEL: Ctrl + Shift + A       ║
+║  Default password: arctis2025        ║
+║                                      ║
+║  TO CHANGE PASSWORD:                 ║
+║  1. Go to: https://emn178.github.io  ║
+║             /online-tools/sha256.html║
+║  2. Type your new password           ║
+║  3. Copy the hash                    ║
+║  4. Replace ADMIN_PASSWORD_HASH      ║
+║     value in this file               ║
+║                                      ║
+║  CLOUDINARY SETUP:                   ║
+║  1. Sign up free at cloudinary.com   ║
+║  2. Copy your Cloud Name             ║
+║  3. Create Upload Preset:            ║
+║     Settings > Upload > Add preset   ║
+║     Name: arctis_unsigned            ║
+║     Mode: Unsigned                   ║
+║  4. Replace CLOUDINARY_CLOUD_NAME    ║
+║     in this file                     ║
+║                                      ║
+╚══════════════════════════════════════╝
+-->
+```
+
+---
+
+## FINAL RULES
+
+- Everything in index.html + /data/content.json (two files only)
+- Vanilla JavaScript only — no frameworks
+- DO NOT change existing design, fonts, colors, animations
+- New CSS for admin panel goes at bottom of existing <style> block
+- Password never stored in plain text
+- Images stored on Cloudinary, only URLs stored in content.json
+- Admin panel invisible to regular visitors

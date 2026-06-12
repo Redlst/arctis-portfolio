@@ -1,0 +1,80 @@
+{
+  "projects": [
+    {
+      "id": "sharp-barbershop",
+      "name": "SHARP Barbershop",
+      "description": "Premium landing page for a barbershop brand. Clean dark aesthetic, online booking CTA, and lightning-fast load times. Built and deployed on Vercel.",
+      "tags": ["Landing Page", "HTML/CSS", "Vercel"],
+      "liveUrl": "",
+      "imageUrl": "",
+      "clientContact": ""
+    },
+    {
+      "id": "proart-renovation",
+      "name": "ProArt Renovation",
+      "description": "Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. Deployed on Vercel.",
+      "tags": ["Landing Page", "HTML/CSS", "Vercel"],
+      "liveUrl": "",
+      "imageUrl": "",
+      "clientContact": ""
+    },
+    {
+      "id": "ai-telegram-bot",
+      "name": "AI Telegram Chatbot",
+      "description": "24/7 automated Telegram bot for a client, powered by Claude Haiku. Handles FAQs, captures leads, and escalates to human when needed.",
+      "tags": ["Telegram Bot", "Claude AI", "Railway"],
+      "liveUrl": "",
+      "imageUrl": "",
+      "clientContact": ""
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review-1",
+      "imageUrl": "",
+      "stars": 5,
+      "quote": "Delivered exactly what I needed — fast, clean, and professional. The landing page went live in 3 days and already converted new clients.",
+      "clientName": "Alex M.",
+      "clientRole": "Owner, SHARP Barbershop",
+      "clientContact": ""
+    },
+    {
+      "id": "review-2",
+      "imageUrl": "",
+      "stars": 5,
+      "quote": "Our renovation business looks completely premium now. The site design built instant trust with new customers. Highly recommend.",
+      "clientName": "Maria K.",
+      "clientRole": "Director, ProArt Renovation",
+      "clientContact": ""
+    },
+    {
+      "id": "review-3",
+      "imageUrl": "",
+      "stars": 5,
+      "quote": "The Telegram bot handles 80% of our support tickets automatically. We're saving hours every day. Best investment this quarter.",
+      "clientName": "James R.",
+      "clientRole": "Founder, E-commerce Store",
+      "clientContact": ""
+    }
+  ],
+  "services": [
+    {
+      "id": "landing-pages",
+      "icon": "⚡",
+      "title": "AI Landing Pages",
+      "description": "Fast, conversion-focused landing pages built with AI assistance. Clean design, compelling copy, deployed in days — not weeks."
+    },
+    {
+      "id": "telegram-bots",
+      "icon": "🤖",
+      "title": "Telegram AI Chatbots",
+      "description": "24/7 automated bots powered by Claude AI. Handle inquiries, qualify leads, and serve customers while you sleep."
+    },
+    {
+      "id": "web-apps",
+      "icon": "🛠️",
+      "title": "Web Applications",
+      "description": "Custom web products tailored to your business needs. Built lean, shipped fast, designed to scale."
+    }
+  ]
+}

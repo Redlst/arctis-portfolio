@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arctis — AI Solutions Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES
+    ============================================================ */
+    :root {
+      --bg-primary:    #0A0A0A;
+      --bg-secondary:  #111111;
+      --bg-card:       #141414;
+      --bg-card-hover: #181818;
+      --border:        #1E1E1E;
+      --border-hover:  #2E2E2E;
+
+      --accent:        #00C2FF;
+      --accent-dim:    #0099CC;
+      --accent-glow:   rgba(0, 194, 255, 0.15);
+      --accent-glow-strong: rgba(0, 194, 255, 0.30);
+
+      --text-primary:  #F0F0F0;
+      --text-secondary:#8A8A8A;
+      --text-muted:    #555555;
+
+      --font:          'Inter', sans-serif;
+      --radius:        12px;
+      --radius-lg:     20px;
+      --transition:    0.25s ease;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+      50%       { box-shadow: 0 0 40px var(--accent-glow-strong); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .navbar.scrolled {
+      border-bottom-color: var(--border);
+      background: rgba(10, 10, 10, 0.92);
+    }
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar-logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+    .navbar-logo span { color: var(--accent); }
+
+    .navbar-links {
+      display: flex;
+      gap: 36px;
+    }
+    .navbar-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .navbar-links a:hover { color: var(--text-primary); }
+
+    .navbar-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .navbar-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-secondary);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 120px 0 80px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 194, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 194, 255, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-orb {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 194, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero .container { position: relative; z-index: 1; text-align: center; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 194, 255, 0.08);
+      border: 1px solid rgba(0, 194, 255, 0.2);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .hero-headline {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      max-width: 820px;
+      margin: 0 auto 24px;
+      animation: fadeInUp 0.6s ease 0.1s both;
+    }
+    .hero-headline .highlight { color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin: 0 auto 44px;
+      font-weight: 400;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease 0.3s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 30px;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      letter-spacing: 0.01em;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-primary:hover {
+      background: #33CFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 194, 255, 0.35);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-hover);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ============================================================
+       SECTION SHARED STYLES
+    ============================================================ */
+    section { padding: 100px 0; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+    .section-header { margin-bottom: 64px; }
+
+    /* ============================================================
+       SERVICES
+    ============================================================ */
+    .services { background: var(--bg-primary); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow-strong), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .service-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+    }
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: rgba(0, 194, 255, 0.1);
+      border: 1px solid rgba(0, 194, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+    }
+    .service-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       WORK / PORTFOLIO
+    ============================================================ */
+    .work { background: var(--bg-secondary); }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+    .project-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .project-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: linear-gradient(135deg, #141414 0%, #1a1a2e 50%, #141414 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .project-image img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .project-image::after {
+      content: attr(data-label);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .project-image.has-image::after { display: none; }
+
+    .project-body { padding: 28px; }
+    .project-body h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .project-body p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0, 194, 255, 0.08);
+      border: 1px solid rgba(0, 194, 255, 0.15);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .btn-small {
+      font-size: 0.82rem;
+      padding: 10px 20px;
+    }
+
+    /* ============================================================
+       TESTIMONIALS
+    ============================================================ */
+    .testimonials { background: var(--bg-primary); }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+    .review-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+    .review-screenshot {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(160deg, #141414, #1a1a1a);
+      position: relative;
+      overflow: hidden;
+    }
+    .review-screenshot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .review-screenshot::after {
+      content: 'Review Screenshot';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .review-screenshot.has-image::after { display: none; }
+
+    .review-body { padding: 24px; }
+    .review-stars {
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .review-quote {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .review-author {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .review-role {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .review-contact-link {
+      display: inline-flex;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 10px;
+      transition: opacity var(--transition);
+    }
+    .review-contact-link:hover { opacity: 0.7; }
+
+    /* ============================================================
+       CONTACT / CTA
+    ============================================================ */
+    .contact { background: var(--bg-secondary); }
+
+    .contact-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contact-inner .section-sub {
+      max-width: 100%;
+      margin: 0 auto 56px;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all var(--transition);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .social-link:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+    .social-link svg {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+    .social-link-label {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-left: auto;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+    }
+    footer p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    footer span { color: var(--accent); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      section { padding: 72px 0; }
+
+      .navbar-links { display: none; }
+      .navbar-links.open {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: rgba(10, 10, 10, 0.98);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px 24px;
+      }
+      .navbar-links.open a { padding: 12px 0; border-bottom: 1px solid var(--border); }
+      .navbar-toggle { display: flex; }
+
+      .hero { padding: 100px 0 64px; }
+      .services-grid, .work-grid, .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-ctas { flex-direction: column; align-items: center; }
+    }
+
+    /* ============================================================
+       ADMIN — PASSWORD MODAL
+    ============================================================ */
+    .password-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0, 0, 0, 0.88);
+      align-items: center;
+      justify-content: center;
+    }
+    .password-modal.visible { display: flex; }
+
+    .password-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      width: 340px;
+      max-width: 90vw;
+      text-align: center;
+    }
+    .password-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    #passwordForm {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-8px); }
+      40%       { transform: translateX(8px); }
+      60%       { transform: translateX(-6px); }
+      80%       { transform: translateX(6px); }
+    }
+    #passwordForm.shake { animation: shake 0.45s ease; }
+
+    .admin-input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition);
+      width: 100%;
+      text-align: center;
+    }
+    .admin-input:focus { border-color: var(--accent); }
+
+    .password-error {
+      font-size: 0.8rem;
+      color: #FF5555;
+      min-height: 18px;
+    }
+
+    /* ============================================================
+       ADMIN — OVERLAY + PANEL
+    ============================================================ */
+    .admin-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+    }
+    .admin-overlay.visible { display: block; }
+
+    .admin-panel {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 480px;
+      height: 100vh;
+      z-index: 201;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .admin-panel.open { right: 0; }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .admin-header h2 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .admin-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.3rem;
+      line-height: 1;
+      padding: 4px 6px;
+      transition: color var(--transition);
+      border-radius: 6px;
+    }
+    .admin-close-btn:hover { color: var(--text-primary); background: var(--bg-card); }
+
+    /* Tabs */
+    .admin-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .admin-tab-btn {
+      flex: 1;
+      padding: 13px 8px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition);
+      margin-bottom: -1px;
+    }
+    .admin-tab-btn:hover { color: var(--text-secondary); }
+    .admin-tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .admin-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .admin-body::-webkit-scrollbar { width: 4px; }
+    .admin-body::-webkit-scrollbar-track { background: transparent; }
+    .admin-body::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+
+    .admin-tab-content { display: none; }
+    .admin-tab-content.active { display: block; }
+
+    /* Admin Cards */
+    .admin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .admin-preview {
+      margin-bottom: 14px;
+    }
+    .admin-preview img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .admin-img-placeholder {
+      width: 100%;
+      height: 100px;
+      background: var(--bg-secondary);
+      border: 1px dashed var(--border-hover);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .admin-upload-btn {
+      width: 100%;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid var(--border-hover);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-family: var(--font);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .admin-upload-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .admin-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .admin-fields label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .admin-fields label small {
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 4px;
+      font-size: 0.68rem;
+    }
+    .admin-fields input,
+    .admin-fields textarea {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      outline: none;
+      resize: vertical;
+      transition: border-color var(--transition);
+      width: 100%;
+    }
+    .admin-fields input:focus,
+    .admin-fields textarea:focus { border-color: var(--accent); }
+
+    .admin-delete-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 68, 68, 0.4);
+      border-radius: 8px;
+      color: #FF5555;
+      font-family: var(--font);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      align-self: flex-start;
+    }
+    .admin-delete-btn:hover { background: rgba(255, 68, 68, 0.1); border-color: #FF5555; }
+
+    /* Star rating in admin */
+    .admin-stars-row {
+      display: flex;
+      gap: 4px;
+    }
+    .admin-star {
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--border-hover);
+      transition: color 0.15s;
+      user-select: none;
+    }
+    .admin-star.on { color: #FFB800; }
+    .admin-star:hover { color: #FFB800; }
+
+    /* Add button */
+    .admin-add-btn {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0, 194, 255, 0.06);
+      border: 1px dashed rgba(0, 194, 255, 0.25);
+      border-radius: var(--radius);
+      color: var(--accent);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      margin-top: 4px;
+    }
+    .admin-add-btn:hover { background: rgba(0, 194, 255, 0.12); border-color: var(--accent); }
+
+    /* Admin footer */
+    .admin-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .admin-export-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: #000;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .admin-export-btn:hover { background: #33CFFF; transform: translateY(-1px); }
+
+    /* ============================================================
+       ADMIN — EXPORT MODAL
+    ============================================================ */
+    .export-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: rgba(0, 0, 0, 0.88);
+      align-items: center;
+      justify-content: center;
+    }
+    .export-modal.visible { display: flex; }
+
+    .export-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      width: 440px;
+      max-width: 90vw;
+    }
+    .export-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .export-card > p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .export-steps {
+      list-style: none;
+      counter-reset: steps;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .export-steps li {
+      counter-increment: steps;
+      display: flex;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .export-steps li::before {
+      content: counter(steps);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      background: rgba(0, 194, 255, 0.12);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+    .export-steps li strong { color: var(--text-primary); }
+
+    /* Responsive admin */
+    @media (max-width: 520px) {
+      .admin-panel { width: 100vw; right: -100vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!--
+╔══════════════════════════════════════╗
+║         ARCTIS ADMIN SETUP           ║
+╠══════════════════════════════════════╣
+║                                      ║
+║  ADMIN PANEL: Ctrl + Shift + A       ║
+║  Default password: arctis2025        ║
+║                                      ║
+║  TO CHANGE PASSWORD:                 ║
+║  1. Go to: https://emn178.github.io  ║
+║             /online-tools/sha256.html║
+║  2. Type your new password           ║
+║  3. Copy the hash                    ║
+║  4. Replace ADMIN_PASSWORD_HASH      ║
+║     value in this file               ║
+║                                      ║
+║  CLOUDINARY SETUP:                   ║
+║  1. Sign up free at cloudinary.com   ║
+║  2. Copy your Cloud Name             ║
+║  3. Create Upload Preset:            ║
+║     Settings > Upload > Add preset   ║
+║     Name: arctis_unsigned            ║
+║     Mode: Unsigned                   ║
+║  4. Replace CLOUDINARY_CLOUD_NAME    ║
+║     in this file                     ║
+║                                      ║
+╚══════════════════════════════════════╝
+-->
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="navbar-logo">ARC<span>T</span>IS</a>
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="container">
+      <div class="hero-badge">Available for projects</div>
+      <h1 class="hero-headline">
+        I Build <span class="highlight">AI-Powered Products</span><br />That Grow Your Business
+      </h1>
+      <p class="hero-sub">
+        From landing pages to AI chatbots — built fast, deployed faster.
+      </p>
+      <div class="hero-ctas">
+        <a href="#work" class="btn btn-primary">See My Work</a>
+        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SERVICES
+  ============================================================ -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">What I Build</p>
+        <h2 class="section-title">Services</h2>
+        <p class="section-sub">Focused on three high-impact product types that deliver real ROI.</p>
+      </div>
+      <div class="services-grid" id="servicesGrid">
+
+        <div class="service-card reveal">
+          <div class="service-icon">⚡</div>
+          <h3>AI Landing Pages</h3>
+          <p>Fast, conversion-focused landing pages built with AI assistance. Clean design, compelling copy, deployed in days — not weeks.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">🤖</div>
+          <h3>Telegram AI Chatbots</h3>
+          <p>24/7 automated bots powered by Claude AI. Handle inquiries, qualify leads, and serve customers while you sleep.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">🛠️</div>
+          <h3>Web Applications</h3>
+          <p>Custom web products tailored to your business needs. Built lean, shipped fast, designed to scale.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WORK / PORTFOLIO
+  ============================================================ -->
+  <section class="work" id="work">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Portfolio</p>
+        <h2 class="section-title">My Work</h2>
+        <p class="section-sub">A selection of recent projects shipped for real clients.</p>
+      </div>
+      <div class="work-grid" id="workGrid">
+
+        <!-- =====================================================
+             HOW TO ADD A NEW PROJECT CARD:
+             Copy the block between "PROJECT CARD START" and
+             "PROJECT CARD END" comments and paste it inside
+             .work-grid. Update img src, h3, p, tags, and href.
+             Or use the Admin Panel (Ctrl+Shift+A) to manage
+             projects visually without editing HTML.
+        ===================================================== -->
+
+        <!-- PROJECT CARD START -->
+        <div class="project-card reveal">
+          <!-- Replace with your screenshot -->
+          <div class="project-image" data-label="SHARP Barbershop"></div>
+          <div class="project-body">
+            <h3>SHARP Barbershop</h3>
+            <p>Premium landing page for a barbershop brand. Clean dark aesthetic, online booking CTA, and lightning-fast load times. Built and deployed on Vercel.</p>
+            <div class="project-tags">
+              <span class="tag">Landing Page</span>
+              <span class="tag">HTML/CSS</span>
+              <span class="tag">Vercel</span>
+            </div>
+            <!-- Add your Vercel URL to the href below -->
+            <a href="#" class="btn btn-secondary btn-small" target="_blank" rel="noopener noreferrer">View Live →</a>
+          </div>
+        </div>
+        <!-- PROJECT CARD END -->
+
+        <!-- PROJECT CARD START -->
+        <div class="project-card reveal">
+          <!-- Replace with your screenshot -->
+          <div class="project-image" data-label="ProArt Renovation"></div>
+          <div class="project-body">
+            <h3>ProArt Renovation</h3>
+            <p>Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. Deployed on Vercel.</p>
+            <div class="project-tags">
+              <span class="tag">Landing Page</span>
+              <span class="tag">HTML/CSS</span>
+              <span class="tag">Vercel</span>
+            </div>
+            <!-- Add your Vercel URL to the href below -->
+            <a href="#" class="btn btn-secondary btn-small" target="_blank" rel="noopener noreferrer">View Live →</a>
+          </div>
+        </div>
+        <!-- PROJECT CARD END -->
+
+        <!-- PROJECT CARD START -->
+        <div class="project-card reveal">
+          <!-- Replace with your screenshot -->
+          <div class="project-image" data-label="AI Telegram Bot"></div>
+          <div class="project-body">
+            <h3>AI Telegram Chatbot</h3>
+            <p>24/7 automated Telegram bot for a client, powered by Claude Haiku. Handles FAQs, captures leads, and escalates to human when needed.</p>
+            <div class="project-tags">
+              <span class="tag">Telegram Bot</span>
+              <span class="tag">Claude AI</span>
+              <span class="tag">Railway</span>
+            </div>
+            <a href="#" class="btn btn-secondary btn-small" onclick="return false" style="opacity:0.45;cursor:default;">View Live →</a>
+          </div>
+        </div>
+        <!-- PROJECT CARD END -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TESTIMONIALS
+  ============================================================ -->
+  <section class="testimonials" id="reviews">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Social Proof</p>
+        <h2 class="section-title">What Clients Say</h2>
+        <p class="section-sub">Real feedback from real clients. No fluff.</p>
+      </div>
+      <div class="reviews-grid" id="reviewsGrid">
+
+        <!-- =====================================================
+             HOW TO ADD A NEW REVIEW CARD:
+             Copy the block between "REVIEW CARD START" and
+             "REVIEW CARD END" comments and paste it inside
+             .reviews-grid. Update img src, quote, name, and role.
+             Or use the Admin Panel (Ctrl+Shift+A) to add reviews
+             visually with screenshot upload support.
+        ===================================================== -->
+
+        <!-- REVIEW CARD START -->
+        <div class="review-card reveal">
+          <!-- Replace with your screenshot of the review -->
+          <div class="review-screenshot"></div>
+          <div class="review-body">
+            <div class="review-stars">★★★★★</div>
+            <!-- Update with real info -->
+            <p class="review-quote">"Delivered exactly what I needed — fast, clean, and professional. The landing page went live in 3 days and already converted new clients."</p>
+            <p class="review-author">Alex M.</p>
+            <p class="review-role">Owner, SHARP Barbershop</p>
+          </div>
+        </div>
+        <!-- REVIEW CARD END -->
+
+        <!-- REVIEW CARD START -->
+        <div class="review-card reveal">
+          <!-- Replace with your screenshot of the review -->
+          <div class="review-screenshot"></div>
+          <div class="review-body">
+            <div class="review-stars">★★★★★</div>
+            <!-- Update with real info -->
+            <p class="review-quote">"Our renovation business looks completely premium now. The site design built instant trust with new customers. Highly recommend."</p>
+            <p class="review-author">Maria K.</p>
+            <p class="review-role">Director, ProArt Renovation</p>
+          </div>
+        </div>
+        <!-- REVIEW CARD END -->
+
+        <!-- REVIEW CARD START -->
+        <div class="review-card reveal">
+          <!-- Replace with your screenshot of the review -->
+          <div class="review-screenshot"></div>
+          <div class="review-body">
+            <div class="review-stars">★★★★★</div>
+            <!-- Update with real info -->
+            <p class="review-quote">"The Telegram bot handles 80% of our support tickets automatically. We're saving hours every day. Best investment this quarter."</p>
+            <p class="review-author">James R.</p>
+            <p class="review-role">Founder, E-commerce Store</p>
+          </div>
+        </div>
+        <!-- REVIEW CARD END -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT
+  ============================================================ -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="reveal">
+          <p class="section-label">Contact</p>
+          <h2 class="section-title">Let's Build Something Together</h2>
+          <p class="section-sub">Have a project in mind? Reach out — I respond fast.</p>
+        </div>
+
+        <div class="social-links reveal">
+
+          <a href="https://t.me/Redlst" class="social-link" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            <span>@Redlst</span>
+            <span class="social-link-label">Telegram</span>
+          </a>
+
+          <a href="https://x.com/ARCTlS" class="social-link" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <span>@ARCTlS</span>
+            <span class="social-link-label">X (Twitter)</span>
+          </a>
+
+          <a href="https://www.linkedin.com/in/artem-tuleninov-83a64937b/" class="social-link" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <span>/in/artem-tuleninov</span>
+            <span class="social-link-label">LinkedIn</span>
+          </a>
+
+          <a href="https://www.instagram.com/arctls/" class="social-link" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            <span>@arctls</span>
+            <span class="social-link-label">Instagram</span>
+          </a>
+
+          <a href="mailto:arctissports247@gmail.com" class="social-link" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <span>arctissports247@gmail.com</span>
+            <span class="social-link-label">Email</span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="container">
+      <p>© 2025 <span>Arctis</span>. All rights reserved.<span id="adminDot" onclick="triggerAdmin()" style="opacity:0.01;cursor:default;user-select:none;display:inline-block;width:6px;height:6px;margin-left:2px;vertical-align:middle;">·</span></p>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       PASSWORD MODAL
+  ============================================================ -->
+  <div class="password-modal" id="passwordModal">
+    <div class="password-card">
+      <h3>Admin Access</h3>
+      <form id="passwordForm" onsubmit="return false">
+        <input type="password" id="adminPasswordInput" class="admin-input" placeholder="Enter password" autocomplete="current-password" />
+        <button type="submit" class="btn btn-primary" onclick="checkPassword()" style="width:100%;justify-content:center;">Enter</button>
+        <p class="password-error" id="passwordError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ADMIN OVERLAY
+  ============================================================ -->
+  <div class="admin-overlay" id="adminOverlay"></div>
+
+  <!-- ============================================================
+       ADMIN PANEL
+  ============================================================ -->
+  <aside class="admin-panel" id="adminPanel">
+    <div class="admin-header">
+      <h2>Arctis Admin</h2>
+      <button class="admin-close-btn" onclick="closeAdmin()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" data-tab="projects" onclick="switchTab('projects')">Projects</button>
+      <button class="admin-tab-btn" data-tab="reviews" onclick="switchTab('reviews')">Reviews</button>
+      <button class="admin-tab-btn" data-tab="services" onclick="switchTab('services')">Services</button>
+    </div>
+
+    <div class="admin-body">
+      <!-- PROJECTS TAB -->
+      <div class="admin-tab-content active" data-tab="projects">
+        <div id="adminProjectsList"></div>
+        <button class="admin-add-btn" onclick="addProject()">+ Add New Project</button>
+      </div>
+
+      <!-- REVIEWS TAB -->
+      <div class="admin-tab-content" data-tab="reviews">
+        <div id="adminReviewsList"></div>
+        <button class="admin-add-btn" onclick="addReview()">+ Add New Review</button>
+      </div>
+
+      <!-- SERVICES TAB -->
+      <div class="admin-tab-content" data-tab="services">
+        <div id="adminServicesList"></div>
+        <button class="admin-add-btn" onclick="addService()">+ Add New Service</button>
+      </div>
+    </div>
+
+    <div class="admin-footer">
+      <button class="admin-export-btn" onclick="exportContent()">⬇ Export content.json</button>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       EXPORT INSTRUCTIONS MODAL
+  ============================================================ -->
+  <div class="export-modal" id="exportModal">
+    <div class="export-card">
+      <h3>Your content.json is ready!</h3>
+      <p>To publish your changes:</p>
+      <ol class="export-steps">
+        <li>Download <strong>content.json</strong> (downloading now…)</li>
+        <li>Replace <strong>/data/content.json</strong> in your project folder</li>
+        <li>Push to <strong>GitHub</strong></li>
+        <li>Vercel will redeploy in ~30 seconds ✓</li>
+      </ol>
+      <button class="btn btn-primary" onclick="document.getElementById('exportModal').classList.remove('visible')" style="width:100%;justify-content:center;">Got it</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+       CONFIG — fill in after Cloudinary signup
+    ============================================================ */
+    const CLOUDINARY_CLOUD_NAME   = 'YOUR_CLOUD_NAME';    // replace after signup
+    const CLOUDINARY_UPLOAD_PRESET = 'arctis_unsigned';   // create in Cloudinary dashboard
+
+    /* SHA-256 of "arctis2025" — change via https://emn178.github.io/online-tools/sha256.html */
+    const ADMIN_PASSWORD_HASH = 'ef611a9fef77bbc9226b0a4d370fed39aeb7595d6de053cec701392f8ea3b6ae';
+
+    /* ============================================================
+       DEFAULT CONTENT DATA  (mirrors hardcoded HTML fallback)
+    ============================================================ */
+    let contentData = {
+      projects: [
+        {
+          id: 'sharp-barbershop',
+          name: 'SHARP Barbershop',
+          description: 'Premium landing page for a barbershop brand. Clean dark aesthetic, online booking CTA, and lightning-fast load times. Built and deployed on Vercel.',
+          tags: ['Landing Page', 'HTML/CSS', 'Vercel'],
+          liveUrl: '',
+          imageUrl: '',
+          clientContact: ''
+        },
+        {
+          id: 'proart-renovation',
+          name: 'ProArt Renovation',
+          description: 'Business landing page for a renovation company. Focused on trust signals, portfolio showcase, and lead capture. Deployed on Vercel.',
+          tags: ['Landing Page', 'HTML/CSS', 'Vercel'],
+          liveUrl: '',
+          imageUrl: '',
+          clientContact: ''
+        },
+        {
+          id: 'ai-telegram-bot',
+          name: 'AI Telegram Chatbot',
+          description: '24/7 automated Telegram bot for a client, powered by Claude Haiku. Handles FAQs, captures leads, and escalates to human when needed.',
+          tags: ['Telegram Bot', 'Claude AI', 'Railway'],
+          liveUrl: '',
+          imageUrl: '',
+          clientContact: ''
+        }
+      ],
+      reviews: [
+        {
+          id: 'review-1',
+          imageUrl: '',
+          stars: 5,
+          quote: 'Delivered exactly what I needed — fast, clean, and professional. The landing page went live in 3 days and already converted new clients.',
+          clientName: 'Alex M.',
+          clientRole: 'Owner, SHARP Barbershop',
+          clientContact: ''
+        },
+        {
+          id: 'review-2',
+          imageUrl: '',
+          stars: 5,
+          quote: 'Our renovation business looks completely premium now. The site design built instant trust with new customers. Highly recommend.',
+          clientName: 'Maria K.',
+          clientRole: 'Director, ProArt Renovation',
+          clientContact: ''
+        },
+        {
+          id: 'review-3',
+          imageUrl: '',
+          stars: 5,
+          quote: "The Telegram bot handles 80% of our support tickets automatically. We're saving hours every day. Best investment this quarter.",
+          clientName: 'James R.',
+          clientRole: 'Founder, E-commerce Store',
+          clientContact: ''
+        }
+      ],
+      services: [
+        {
+          id: 'landing-pages',
+          icon: '⚡',
+          title: 'AI Landing Pages',
+          description: 'Fast, conversion-focused landing pages built with AI assistance. Clean design, compelling copy, deployed in days — not weeks.'
+        },
+        {
+          id: 'telegram-bots',
+          icon: '🤖',
+          title: 'Telegram AI Chatbots',
+          description: '24/7 automated bots powered by Claude AI. Handle inquiries, qualify leads, and serve customers while you sleep.'
+        },
+        {
+          id: 'web-apps',
+          icon: '🛠️',
+          title: 'Web Applications',
+          description: 'Custom web products tailored to your business needs. Built lean, shipped fast, designed to scale.'
+        }
+      ]
+    };
+
+    /* ============================================================
+       UTILITIES
+    ============================================================ */
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    let revealObserver;
+
+    function initScrollReveal() {
+      revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObserver.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    }
+
+    function observeNewReveal() {
+      if (!revealObserver) return;
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+    }
+
+    /* ============================================================
+       RENDER — LIVE SECTIONS
+    ============================================================ */
+    function renderProjects() {
+      const grid = document.getElementById('workGrid');
+      if (!grid) return;
+      grid.innerHTML = contentData.projects.map(p => {
+        const imgHtml = p.imageUrl
+          ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)} screenshot" />`
+          : '';
+        const hasImg  = p.imageUrl ? ' has-image' : '';
+        const label   = p.imageUrl ? '' : esc(p.name);
+        const tags    = p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('');
+        const liveBtn = p.liveUrl
+          ? `<a href="${esc(p.liveUrl)}" class="btn btn-secondary btn-small" target="_blank" rel="noopener noreferrer">View Live →</a>`
+          : `<a href="#" class="btn btn-secondary btn-small" onclick="return false" style="opacity:0.45;cursor:default;">View Live →</a>`;
+        return `
+          <div class="project-card reveal">
+            <div class="project-image${hasImg}" data-label="${label}">${imgHtml}</div>
+            <div class="project-body">
+              <h3>${esc(p.name)}</h3>
+              <p>${esc(p.description)}</p>
+              <div class="project-tags">${tags}</div>
+              ${liveBtn}
+            </div>
+          </div>`;
+      }).join('');
+      observeNewReveal();
+    }
+
+    function renderReviews() {
+      const grid = document.getElementById('reviewsGrid');
+      if (!grid) return;
+      grid.innerHTML = contentData.reviews.map(r => {
+        const stars   = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
+        const imgHtml = r.imageUrl ? `<img src="${esc(r.imageUrl)}" alt="${esc(r.clientName)} review" />` : '';
+        const hasImg  = r.imageUrl ? ' has-image' : '';
+        let contactLink = '';
+        if (r.clientContact) {
+          const href = (r.clientContact.startsWith('http') || r.clientContact.startsWith('tg:'))
+            ? esc(r.clientContact)
+            : r.clientContact.includes('@') ? `mailto:${esc(r.clientContact)}` : esc(r.clientContact);
+          contactLink = `<a href="${href}" class="review-contact-link" target="_blank" rel="noopener noreferrer">Contact Client →</a>`;
+        }
+        return `
+          <div class="review-card reveal">
+            <div class="review-screenshot${hasImg}">${imgHtml}</div>
+            <div class="review-body">
+              <div class="review-stars">${stars}</div>
+              <p class="review-quote">"${esc(r.quote)}"</p>
+              <p class="review-author">${esc(r.clientName)}</p>
+              <p class="review-role">${esc(r.clientRole)}</p>
+              ${contactLink}
+            </div>
+          </div>`;
+      }).join('');
+      observeNewReveal();
+    }
+
+    function renderServices() {
+      const grid = document.getElementById('servicesGrid');
+      if (!grid) return;
+      grid.innerHTML = contentData.services.map(s => `
+        <div class="service-card reveal">
+          <div class="service-icon">${esc(s.icon)}</div>
+          <h3>${esc(s.title)}</h3>
+          <p>${esc(s.description)}</p>
+        </div>`).join('');
+      observeNewReveal();
+    }
+
+    function renderAll() {
+      renderProjects();
+      renderReviews();
+      renderServices();
+    }
+
+    /* ============================================================
+       ADMIN — FORM RENDERERS
+    ============================================================ */
+    function renderAdminProjects() {
+      const el = document.getElementById('adminProjectsList');
+      if (!el) return;
+      el.innerHTML = contentData.projects.map(p => `
+        <div class="admin-card">
+          <div class="admin-preview">
+            ${p.imageUrl
+              ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" />`
+              : '<div class="admin-img-placeholder">No Image</div>'}
+            <button class="admin-upload-btn" onclick="uploadImage('project','${esc(p.id)}')">Upload Image</button>
+          </div>
+          <div class="admin-fields">
+            <label>Name</label>
+            <input type="text" value="${esc(p.name)}" oninput="updateProject('${esc(p.id)}','name',this.value)" />
+            <label>Description</label>
+            <textarea rows="3" oninput="updateProject('${esc(p.id)}','description',this.value)">${esc(p.description)}</textarea>
+            <label>Tags <small>comma-separated</small></label>
+            <input type="text" value="${esc(p.tags.join(', '))}" placeholder="Landing Page, HTML/CSS, Vercel"
+              oninput="updateProject('${esc(p.id)}','tags',this.value.split(',').map(t=>t.trim()).filter(Boolean))" />
+            <label>Live URL</label>
+            <input type="text" value="${esc(p.liveUrl || '')}" placeholder="https://your-project.vercel.app"
+              oninput="updateProject('${esc(p.id)}','liveUrl',this.value)" />
+            <label>Client Contact <small>optional</small></label>
+            <input type="text" value="${esc(p.clientContact || '')}" placeholder="Telegram or email of client"
+              oninput="updateProject('${esc(p.id)}','clientContact',this.value)" />
+            <button class="admin-delete-btn" onclick="deleteProject('${esc(p.id)}')">Delete Project</button>
+          </div>
+        </div>`).join('');
+    }
+
+    function renderAdminReviews() {
+      const el = document.getElementById('adminReviewsList');
+      if (!el) return;
+      el.innerHTML = contentData.reviews.map(r => {
+        const stars = [1,2,3,4,5].map(n =>
+          `<span class="admin-star ${n <= r.stars ? 'on' : ''}" onclick="setStars('${esc(r.id)}',${n})">★</span>`
+        ).join('');
+        return `
+          <div class="admin-card">
+            <div class="admin-preview">
+              ${r.imageUrl
+                ? `<img src="${esc(r.imageUrl)}" alt="Review screenshot" />`
+                : '<div class="admin-img-placeholder">No Screenshot</div>'}
+              <button class="admin-upload-btn" onclick="uploadImage('review','${esc(r.id)}')">Upload Screenshot</button>
+            </div>
+            <div class="admin-fields">
+              <label>Star Rating</label>
+              <div class="admin-stars-row" data-rid="${esc(r.id)}">${stars}</div>
+              <label>Quote</label>
+              <textarea rows="3" oninput="updateReview('${esc(r.id)}','quote',this.value)">${esc(r.quote)}</textarea>
+              <label>Client Name</label>
+              <input type="text" value="${esc(r.clientName)}" oninput="updateReview('${esc(r.id)}','clientName',this.value)" />
+              <label>Client Role / Company</label>
+              <input type="text" value="${esc(r.clientRole)}" oninput="updateReview('${esc(r.id)}','clientRole',this.value)" />
+              <label>Client Contact <small>optional — enables "Contact Client →" link</small></label>
+              <input type="text" value="${esc(r.clientContact || '')}" placeholder="Telegram, email, or LinkedIn"
+                oninput="updateReview('${esc(r.id)}','clientContact',this.value)" />
+              <button class="admin-delete-btn" onclick="deleteReview('${esc(r.id)}')">Delete Review</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderAdminServices() {
+      const el = document.getElementById('adminServicesList');
+      if (!el) return;
+      el.innerHTML = contentData.services.map(s => `
+        <div class="admin-card">
+          <div class="admin-fields">
+            <label>Icon <small>emoji</small></label>
+            <input type="text" value="${esc(s.icon)}" placeholder="⚡ or 🤖 or any emoji" style="font-size:1.1rem;"
+              oninput="updateService('${esc(s.id)}','icon',this.value)" />
+            <label>Title</label>
+            <input type="text" value="${esc(s.title)}" oninput="updateService('${esc(s.id)}','title',this.value)" />
+            <label>Description</label>
+            <textarea rows="3" oninput="updateService('${esc(s.id)}','description',this.value)">${esc(s.description)}</textarea>
+            <button class="admin-delete-btn" onclick="deleteService('${esc(s.id)}')">Delete Service</button>
+          </div>
+        </div>`).join('');
+    }
+
+    /* ============================================================
+       ADMIN — DATA MUTATIONS
+    ============================================================ */
+    function updateProject(id, field, value) {
+      const p = contentData.projects.find(x => x.id === id);
+      if (p) { p[field] = value; renderProjects(); }
+    }
+    function deleteProject(id) {
+      if (!confirm('Delete this project?')) return;
+      contentData.projects = contentData.projects.filter(x => x.id !== id);
+      renderAdminProjects();
+      renderProjects();
+    }
+    function addProject() {
+      contentData.projects.push({ id: 'proj-' + Date.now(), name: 'New Project', description: 'Project description.', tags: [], liveUrl: '', imageUrl: '', clientContact: '' });
+      renderAdminProjects();
+      renderProjects();
+      document.getElementById('adminProjectsList').lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateReview(id, field, value) {
+      const r = contentData.reviews.find(x => x.id === id);
+      if (r) { r[field] = value; renderReviews(); }
+    }
+    function setStars(id, n) {
+      const r = contentData.reviews.find(x => x.id === id);
+      if (!r) return;
+      r.stars = n;
+      const row = document.querySelector(`.admin-stars-row[data-rid="${id}"]`);
+      if (row) row.querySelectorAll('.admin-star').forEach((s, i) => s.classList.toggle('on', i < n));
+      renderReviews();
+    }
+    function deleteReview(id) {
+      if (!confirm('Delete this review?')) return;
+      contentData.reviews = contentData.reviews.filter(x => x.id !== id);
+      renderAdminReviews();
+      renderReviews();
+    }
+    function addReview() {
+      contentData.reviews.push({ id: 'rev-' + Date.now(), imageUrl: '', stars: 5, quote: 'Client quote here.', clientName: 'Client Name', clientRole: 'Role, Company', clientContact: '' });
+      renderAdminReviews();
+      renderReviews();
+      document.getElementById('adminReviewsList').lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateService(id, field, value) {
+      const s = contentData.services.find(x => x.id === id);
+      if (s) { s[field] = value; renderServices(); }
+    }
+    function deleteService(id) {
+      if (!confirm('Delete this service?')) return;
+      contentData.services = contentData.services.filter(x => x.id !== id);
+      renderAdminServices();
+      renderServices();
+    }
+    function addService() {
+      contentData.services.push({ id: 'svc-' + Date.now(), icon: '✨', title: 'New Service', description: 'Service description.' });
+      renderAdminServices();
+      renderServices();
+      document.getElementById('adminServicesList').lastElementChild?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ============================================================
+       CLOUDINARY UPLOAD
+    ============================================================ */
+    function uploadImage(type, id) {
+      if (typeof cloudinary === 'undefined') {
+        alert('Cloudinary widget not loaded.\nSet CLOUDINARY_CLOUD_NAME and CLOUDINARY_UPLOAD_PRESET in the script.');
+        return;
+      }
+      const widget = cloudinary.createUploadWidget({
+        cloudName: CLOUDINARY_CLOUD_NAME,
+        uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        styles: {
+          palette: {
+            window: '#111111', windowBorder: '#1E1E1E',
+            tabIcon: '#00C2FF', menuIcons: '#8A8A8A',
+            textDark: '#FFFFFF', textLight: '#F0F0F0',
+            link: '#00C2FF', action: '#00C2FF',
+            inactiveTabIcon: '#555555', error: '#FF4444',
+            inProgress: '#00C2FF', complete: '#33CFFF', sourceBg: '#141414'
+          }
+        }
+      }, (error, result) => {
+        if (!error && result && result.event === 'success') {
+          const url = result.info.secure_url;
+          if (type === 'project') { updateProject(id, 'imageUrl', url); renderAdminProjects(); }
+          if (type === 'review')  { updateReview(id, 'imageUrl', url);  renderAdminReviews();  }
+          widget.close();
+        }
+      });
+      widget.open();
+    }
+
+    /* ============================================================
+       EXPORT content.json
+    ============================================================ */
+    function exportContent() {
+      const blob = new Blob([JSON.stringify(contentData, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = Object.assign(document.createElement('a'), { href: url, download: 'content.json' });
+      a.click();
+      URL.revokeObjectURL(url);
+      document.getElementById('exportModal').classList.add('visible');
+    }
+
+    /* ============================================================
+       ADMIN PANEL
+    ============================================================ */
+    function openAdmin() {
+      document.getElementById('adminOverlay').classList.add('visible');
+      document.getElementById('adminPanel').classList.add('open');
+      renderAdminProjects();
+      renderAdminReviews();
+      renderAdminServices();
+    }
+
+    function closeAdmin() {
+      document.getElementById('adminOverlay').classList.remove('visible');
+      document.getElementById('adminPanel').classList.remove('open');
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+      document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === tab));
+    }
+
+    /* ============================================================
+       PASSWORD MODAL
+    ============================================================ */
+    let wrongAttempts = 0;
+    let lockoutTimer  = null;
+
+    async function checkPassword() {
+      if (lockoutTimer) return;
+      const input = document.getElementById('adminPasswordInput').value;
+      const hash  = await sha256(input);
+      if (hash === ADMIN_PASSWORD_HASH) {
+        wrongAttempts = 0;
+        sessionStorage.setItem('adminAuth', '1');
+        document.getElementById('passwordModal').classList.remove('visible');
+        openAdmin();
+      } else {
+        wrongAttempts++;
+        const form = document.getElementById('passwordForm');
+        const err  = document.getElementById('passwordError');
+        form.classList.remove('shake');
+        void form.offsetWidth; // reflow to restart animation
+        form.classList.add('shake');
+        if (wrongAttempts >= 3) {
+          let sec = 30;
+          err.textContent = `Too many attempts. Wait ${sec}s…`;
+          lockoutTimer = setInterval(() => {
+            sec--;
+            err.textContent = sec > 0 ? `Too many attempts. Wait ${sec}s…` : '';
+            if (sec <= 0) { clearInterval(lockoutTimer); lockoutTimer = null; wrongAttempts = 0; }
+          }, 1000);
+        } else {
+          err.textContent = 'Incorrect password.';
+        }
+      }
+    }
+
+    function triggerAdmin() {
+      if (sessionStorage.getItem('adminAuth') === '1') {
+        openAdmin();
+      } else {
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('passwordError').textContent = '';
+        document.getElementById('passwordModal').classList.add('visible');
+        setTimeout(() => document.getElementById('adminPasswordInput').focus(), 80);
+      }
+    }
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Try to load content.json; render only on success — keeps hardcoded HTML as fallback
+      try {
+        const res = await fetch('/data/content.json');
+        if (res.ok) {
+          contentData = await res.json();
+          renderAll();
+        }
+      } catch (_) { /* keep hardcoded HTML */ }
+
+      initScrollReveal();
+
+      // Sticky navbar
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 20));
+
+      // Mobile menu
+      const toggle = document.getElementById('navToggle');
+      const links  = document.getElementById('navLinks');
+      toggle.addEventListener('click', () => links.classList.toggle('open'));
+      links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+      // Ctrl + Shift + A → admin
+      document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'A') { e.preventDefault(); triggerAdmin(); }
+      });
+
+      // Password input: Enter key
+      document.getElementById('adminPasswordInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkPassword();
+      });
+
+      // Overlay click closes admin panel
+      document.getElementById('adminOverlay').addEventListener('click', closeAdmin);
+    });
+  </script>
+
+</body>
+</html>
