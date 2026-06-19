@@ -39,6 +39,19 @@
       "liveUrl": "https://kstphoto.vercel.app/",
       "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781279737/i1keaviccjf5t9mhwkpy.png",
       "clientContact": "https://t.me/KST_R"
+    },
+    {
+      "id": "proj-1781872784367",
+      "name": "AI Dental Assistant",
+      "description": "24/7 AI chat assistant for dental clinics. Answers \npatient questions instantly, books appointments, \nand makes sure no inquiry goes unanswered — even \nafter hours.",
+      "tags": [
+        "AI Chatbot",
+        "Claude API",
+        "Healthcare"
+      ],
+      "liveUrl": "https://web-production-3ebe4.up.railway.app/widget",
+      "imageUrl": "https://res.cloudinary.com/dzblybiim/image/upload/v1781872801/qxhvuz0057yfb4nvs8h1.png",
+      "clientContact": ""
     }
   ],
   "reviews": [
