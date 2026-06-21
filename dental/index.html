@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sunny — AI Assistant for Dental Practices | Arctis</title>
+  <meta name="description" content="Sunny is an AI chat assistant for dental practices — it answers patient FAQs about hours, insurance and emergencies instantly, 24/7, on your own website. Try the live demo." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES  (copied from main Arctis index.html)
+    ============================================================ */
+    :root {
+      --bg-primary:    #0A0A0A;
+      --bg-secondary:  #111111;
+      --bg-card:       #141414;
+      --bg-card-hover: #181818;
+      --border:        #1E1E1E;
+      --border-hover:  #2E2E2E;
+
+      --accent:        #00C2FF;
+      --accent-dim:    #0099CC;
+      --accent-glow:   rgba(0, 194, 255, 0.15);
+      --accent-glow-strong: rgba(0, 194, 255, 0.30);
+
+      --text-primary:  #F0F0F0;
+      --text-secondary:#8A8A8A;
+      --text-muted:    #555555;
+
+      --font:          'Inter', sans-serif;
+      --radius:        12px;
+      --radius-lg:     20px;
+      --transition:    0.25s ease;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a   { color: inherit; text-decoration: none; }
+    ul  { list-style: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section { padding: 96px 0; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 14px 28px;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #001018;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px var(--accent-glow-strong);
+    }
+    .btn-block { width: 100%; }
+
+    /* ============================================================
+       TOP BAR (minimal)
+    ============================================================ */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .topbar-logo {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .topbar-logo span { color: var(--accent); }
+    .topbar-cta {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       SECTION 1 — HERO (split)
+    ============================================================ */
+    .hero {
+      padding: 64px 0 80px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .hero-headline {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+    .hero-headline .highlight { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+    .hero-bullets { margin-bottom: 28px; }
+    .hero-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .hero-bullet svg {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      color: var(--accent);
+      margin-top: 1px;
+    }
+    .hero-note {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ---- Right column: live demo framed like a device ---- */
+    .demo-caption {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .device {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 0 60px var(--accent-glow);
+    }
+    .device-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .device-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--border-hover);
+    }
+    .device-dot:nth-child(1) { background: #ff5f57; opacity: 0.7; }
+    .device-dot:nth-child(2) { background: #febc2e; opacity: 0.7; }
+    .device-dot:nth-child(3) { background: #28c840; opacity: 0.7; }
+    .device-url {
+      margin-left: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .device-screen {
+      position: relative;
+      width: 100%;
+      min-height: 600px;
+      background: var(--bg-primary);
+    }
+    .device-screen iframe {
+      display: block;
+      width: 100%;
+      height: 600px;
+      border: 0;
+    }
+    .demo-hint {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+    .demo-hint b { color: var(--accent); font-weight: 600; }
+
+    /* Fallback card (hidden by default; enabled only if iframe is blocked) */
+    .demo-fallback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      min-height: 600px;
+      padding: 40px;
+      text-align: center;
+    }
+    .demo-fallback .bubble {
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+    .demo-fallback .bubble svg { width: 36px; height: 36px; }
+    .demo-fallback p { color: var(--text-secondary); max-width: 280px; }
+
+    /* ============================================================
+       SECTION 2 — WHY IT MATTERS (stat cards)
+    ============================================================ */
+    .stats { background: var(--bg-secondary); }
+    .stats-head { text-align: center; margin-bottom: 56px; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 28px;
+      text-align: center;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .stat-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+    .stat-number {
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .stat-label {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       SECTION 3 — PRICING (single card)
+    ============================================================ */
+    .pricing { background: var(--bg-primary); }
+    .pricing-head { text-align: center; margin-bottom: 48px; }
+    .price-card {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: 0 0 50px var(--accent-glow);
+    }
+    .price-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .price-amount {
+      font-size: 3.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .price-amount span {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .price-tagline {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .price-subtext {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 16px auto 28px;
+      max-width: 360px;
+    }
+    .price-list {
+      text-align: left;
+      margin: 0 auto 32px;
+      max-width: 320px;
+    }
+    .price-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--text-primary);
+    }
+    .price-list svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       SECTION 4 — CONTACT FORM
+    ============================================================ */
+    .contact { background: var(--bg-secondary); }
+    .contact-head { text-align: center; margin-bottom: 40px; }
+    .contact-sub {
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 16px auto 0;
+    }
+    .contact-form {
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+    }
+    .form-row { margin-bottom: 18px; }
+    .form-row label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .form-row input {
+      width: 100%;
+      font-family: var(--font);
+      font-size: 1rem;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      transition: border-color var(--transition);
+    }
+    .form-row input::placeholder { color: var(--text-muted); }
+    .form-row input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .form-status {
+      display: none;
+      text-align: center;
+      padding: 32px 16px;
+    }
+    .form-status .check {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+    .form-status h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+    .form-status p { color: var(--text-secondary); }
+    .form-error {
+      display: none;
+      color: #ff6b6b;
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .footer-inner span { color: var(--accent); }
+    .footer-link { color: var(--text-secondary); transition: color var(--transition); }
+    .footer-link:hover { color: var(--accent); }
+
+    /* ============================================================
+       SCROLL FADE-IN (sections 2-4)
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ============================================================
+       RESPONSIVE — mobile: text first, demo immediately after
+    ============================================================ */
+    @media (max-width: 860px) {
+      .section { padding: 72px 0; }
+      .hero { padding: 40px 0 56px; }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .stats-grid { grid-template-columns: 1fr; }
+      .device-screen, .demo-fallback { min-height: 560px; }
+      .device-screen iframe { height: 560px; }
+    }
+    @media (max-width: 420px) {
+      .container { padding: 0 18px; }
+      .contact-form, .price-card { padding: 28px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       TOP BAR
+  ============================================================ -->
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#top" class="topbar-logo">Arctis<span>.</span></a>
+      <a href="#contact" class="topbar-cta">Get Started →</a>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       SECTION 1 — HERO
+  ============================================================ -->
+  <section class="hero" id="top">
+    <div class="container hero-grid">
+
+      <!-- LEFT: text -->
+      <div class="hero-text">
+        <span class="hero-eyebrow">For Dental Practices</span>
+        <h1 class="hero-headline">Your front desk,<br><span class="highlight">awake at 2&nbsp;AM.</span></h1>
+        <p class="hero-sub">Sunny answers patient questions instantly — hours, insurance, emergencies — so you never lose a patient to a missed call.</p>
+
+        <ul class="hero-bullets">
+          <li class="hero-bullet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span>Answers patient FAQs instantly, 24/7</span>
+          </li>
+          <li class="hero-bullet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span>Knows your hours, insurance, and services</span>
+          </li>
+          <li class="hero-bullet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h4"/></svg>
+            <span>Sets up on your website in 3–5 days</span>
+          </li>
+        </ul>
+
+        <p class="hero-note">Try it yourself, live, on the right →</p>
+      </div>
+
+      <!-- RIGHT: live demo framed like a device -->
+      <div class="hero-demo">
+        <p class="demo-caption">This is Sunny. Ask her anything a patient would ask.</p>
+        <div class="device">
+          <div class="device-bar">
+            <span class="device-dot"></span>
+            <span class="device-dot"></span>
+            <span class="device-dot"></span>
+            <span class="device-url">your-practice.com</span>
+          </div>
+          <div class="device-screen">
+            <!-- Live Sunny demo embedded (iframe headers verified: no X-Frame-Options / CSP block) -->
+            <iframe
+              id="sunny-iframe"
+              src="https://web-production-3ebe4.up.railway.app/widget"
+              title="Sunny — live AI assistant demo"
+              loading="lazy"></iframe>
+
+            <!-- Fallback shown only if the iframe is blocked at runtime -->
+            <div class="demo-fallback" id="demo-fallback">
+              <div class="bubble">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.6 8.6 0 0 1-4-1L3 20l1-5.5a8.4 8.4 0 0 1-1-4A8.4 8.4 0 0 1 11.5 2 8.4 8.4 0 0 1 21 11.5z"/></svg>
+              </div>
+              <p>Meet Sunny — the AI assistant that answers your patients 24/7.</p>
+              <a class="btn btn-primary" href="https://web-production-3ebe4.up.railway.app/widget" target="_blank" rel="noopener">Chat with Sunny live →</a>
+            </div>
+          </div>
+        </div>
+        <p class="demo-hint">Tap the <b>chat button</b> in the corner to start ↘</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2 — WHY IT MATTERS
+  ============================================================ -->
+  <section class="section stats">
+    <div class="container">
+      <div class="stats-head reveal">
+        <span class="section-eyebrow">Why it matters</span>
+        <h2 class="section-title">Every missed message is a patient you<br>could have kept.</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card reveal">
+          <div class="stat-number">20–30%</div>
+          <div class="stat-label">of after-hours patient inquiries go unanswered industry-wide</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">$300–500</div>
+          <div class="stat-label">average value of a single missed new patient</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Sunny never sleeps, never puts anyone on hold</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3 — PRICING
+  ============================================================ -->
+  <section class="section pricing">
+    <div class="container">
+      <div class="pricing-head reveal">
+        <span class="section-eyebrow">Pricing</span>
+        <h2 class="section-title">Simple, honest pricing.</h2>
+      </div>
+      <div class="price-card reveal">
+        <span class="price-badge">Founding partner</span>
+        <div class="price-amount">$79<span>/month</span></div>
+        <div class="price-tagline">Founding-partner rate for early dental clients</div>
+        <p class="price-subtext">Standard pricing for this kind of assistant runs $200–500/month elsewhere. Cancel anytime. No contract.</p>
+        <ul class="price-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Patient FAQ handling (hours, insurance, services)</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>24/7 availability — never a missed message</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Custom setup tailored to your practice</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>Live on your website in 3–5 days</span>
+          </li>
+        </ul>
+        <a href="#contact" class="btn btn-primary btn-block">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 4 — CONTACT FORM
+  ============================================================ -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="contact-head reveal">
+        <span class="section-eyebrow">Get started</span>
+        <h2 class="section-title">Want this for your practice?</h2>
+        <p class="contact-sub">Leave your info after trying the demo above — I'll reach out personally to set it up.</p>
+      </div>
+
+      <div class="contact-form reveal">
+        <!-- Formspree form — notifications go to arctissports247@gmail.com (set in Formspree account) -->
+        <form id="dental-form" action="https://formspree.io/f/xaqgwvvw" method="POST">
+          <input type="hidden" name="_subject" value="New dental lead — Sunny landing page" />
+          <div class="form-row">
+            <label for="f-name">Name</label>
+            <input id="f-name" type="text" name="name" placeholder="Dr. Jane Smith" required />
+          </div>
+          <div class="form-row">
+            <label for="f-practice">Practice name</label>
+            <input id="f-practice" type="text" name="practice" placeholder="Bright Smile Dental" required />
+          </div>
+          <div class="form-row">
+            <label for="f-email">Email</label>
+            <input id="f-email" type="email" name="email" placeholder="you@practice.com" required />
+          </div>
+          <div class="form-row">
+            <label for="f-phone">Phone <span style="color:var(--text-muted)">(optional)</span></label>
+            <input id="f-phone" type="tel" name="phone" placeholder="(555) 123-4567" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Get Started</button>
+          <p class="form-error" id="form-error">Something went wrong. Please email arctissports247@gmail.com directly.</p>
+        </form>
+
+        <div class="form-status" id="form-status">
+          <div class="check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <h3>Thanks — I'll be in touch soon</h3>
+          <p>I'll personally reach out to set up Sunny for your practice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 Arctis<span>.</span></div>
+      <a class="footer-link" href="https://arctis.tech" target="_blank" rel="noopener">arctis.tech ↗</a>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT (vanilla)
+  ============================================================ -->
+  <script>
+    // --- Scroll fade-in for sections 2-4 ---
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+
+    // --- iframe load safety-net: if the demo never loads, show the fallback card ---
+    (function () {
+      var iframe = document.getElementById('sunny-iframe');
+      var fallback = document.getElementById('demo-fallback');
+      if (!iframe || !fallback) return;
+
+      var loaded = false;
+      iframe.addEventListener('load', function () { loaded = true; });
+
+      // If after 6s the iframe hasn't reported a load event, assume it was blocked.
+      setTimeout(function () {
+        if (!loaded) {
+          iframe.style.display = 'none';
+          fallback.style.display = 'flex';
+        }
+      }, 6000);
+    })();
+
+    // --- Form submit via Formspree (AJAX, inline thank-you, no redirect) ---
+    (function () {
+      var form = document.getElementById('dental-form');
+      var status = document.getElementById('form-status');
+      var errEl = document.getElementById('form-error');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errEl.style.display = 'none';
+
+        // Guard against the unconfigured placeholder action.
+        if (form.action.indexOf('YOUR_FORM_ID') !== -1) {
+          errEl.textContent = 'Form not configured yet (set your Formspree ID). Email arctissports247@gmail.com.';
+          errEl.style.display = 'block';
+          return;
+        }
+
+        var btn = form.querySelector('button[type="submit"]');
+        var original = btn.textContent;
+        btn.textContent = 'Sending…';
+        btn.disabled = true;
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        })
+        .then(function (res) {
+          if (res.ok) {
+            form.style.display = 'none';
+            status.style.display = 'block';
+          } else {
+            throw new Error('bad response');
+          }
+        })
+        .catch(function () {
+          btn.textContent = original;
+          btn.disabled = false;
+          errEl.textContent = 'Something went wrong. Please email arctissports247@gmail.com directly.';
+          errEl.style.display = 'block';
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
